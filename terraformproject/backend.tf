@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "almondbutter"
+    bucket = "yourbuckethere"
     key    = "terraform/state/terraform.tfstate"
     region = "us-east-2"
   }
