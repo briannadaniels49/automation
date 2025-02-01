@@ -1,5 +1,5 @@
 <h1 align="center">You have reached my simple AWS webserver Terraform project</h1>
-<h3 align="center">Using Terraform</h3>
+<h3 align="center">Terraform</h3>
 
 ![alt text](https://github.com/briannadaniels49/automation/blob/main/terraformproject/image.png)
 
