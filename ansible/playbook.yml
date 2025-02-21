@@ -1,0 +1,19 @@
+---
+    - hosts: all
+      become: true
+      tasks:
+        - name: Create directory
+          ansible.builtin.file:
+            path: /Brianna/Houston  # Replace with your desired directory path
+            state: directory
+            mode: '0755'  # Set directory permissions (optional, but recommended)
+            owner: root  # Set directory owner (optional)
+            group: root  # Set directory group (optional)
+        - name: Create file using echo and redirection (file 1)
+          ansible.builtin.shell: echo "This is the content of file 1." > /Brianna/Houston/file1.txt
+          args:
+            executable: /bin/bash
+        - name: Create file using echo and redirection (file 2)
+          ansible.builtin.shell: echo "This is the content of file 2." > /Brianna/Houston/myfile2.txt
+          args:
+            executable: /bin/bash
