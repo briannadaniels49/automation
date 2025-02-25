@@ -23,7 +23,7 @@ jobs:
         run: pwd
   
       - name: Navigate to Terraform Directory (If Necessary)
-        run: cd terraform-docker-project/
+        run: cd /home/runner/work/automation/automation/terraform-docker-project/
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
