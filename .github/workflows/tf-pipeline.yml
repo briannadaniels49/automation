@@ -1,55 +1,65 @@
-name: Terraform Deploy
+name: Terraform CI/CD
 
 on:
-  pull_request:
-    
+  push:
+    branches:
+      - main # Only run on pushes to main
 
 jobs:
-  deploy:
+  terraform:
+    name: Terraform
     runs-on: ubuntu-latest
     environment: prod
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-          
-      - name: List Files
-        run: ls -ltr
-  
-      - name: Navigate to Terraform Directory (If Necessary)
-        run: cd terraform-docker-project
+      - name: List Files (Debug)
+        run: ls -al
 
-      - name: List Files
-        run: pwd
+      - name: Navigate to Terraform Directory
+        run: cd terraform-docker-project # Relative path!
 
-      - name: List Files
-        run: ls -ltr
+      - name: List Files After Navigation (Debug)
+        run: ls -al
 
-      - name: Install Terraform
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_wrapper: false 
+          terraform_version: latest # Or specify a version
 
       - name: Terraform Init
+        id: init
         run: terraform init
 
-      - name: Terraform Fmt
-        run: terraform fmt
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
 
       - name: Terraform Validate
-        run: terraform validate
+        id: validate
+        run: terraform validate -no-color
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        id: plan
+        run: terraform plan -no-color -out=tfplan
+
+      - name: Terraform Plan Comment
+        uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        with:
+          script: |
+            const output = `#### Terraform Plan\n\`\`\`terraform\n${{ steps.plan.outputs.stdout }}\n\`\`\`\n`;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' 
-        run: terraform apply -auto-approve
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve -input=false tfplan
         env:
-          TF_VAR_environment: prod 
+          TF_VAR_environment: prod
