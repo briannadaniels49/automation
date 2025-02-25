@@ -23,7 +23,7 @@ jobs:
         run: ls -ltr
   
       - name: Navigate to Terraform Directory (If Necessary)
-        run: cd /home/runner/work/automation/automation/terraform-docker-project
+        run: cd terraform-docker-project
 
       - name: List Files
         run: pwd
