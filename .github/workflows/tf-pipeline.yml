@@ -19,14 +19,17 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
           
-      - name: List Files (Debug)
-        run: pwd
+      - name: List Files
+        run: ls -ltr
   
       - name: Navigate to Terraform Directory (If Necessary)
         run: cd /home/runner/work/automation/automation/terraform-docker-project
 
-      - name: List Files (Debug)
+      - name: List Files
         run: pwd
+
+      - name: List Files
+        run: ls -ltr
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
