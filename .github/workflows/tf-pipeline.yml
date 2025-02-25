@@ -20,10 +20,10 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           
       - name: List Files (Debug)
-          run: ls -al
+        run: ls -al
   
       - name: Navigate to Terraform Directory (If Necessary)
-          run: cd /automation/terraform-docker-project
+        run: cd /automation/terraform-docker-project
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
