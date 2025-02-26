@@ -9,9 +9,17 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: prod
+    
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: view
+        run: cd terraform-docker-project/
+
+      - name: view
+        run: ls -ltr
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -24,12 +32,6 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_wrapper: false 
-
-      - name: view
-        run: cd terraform-docker-project/
-
-      - name: view
-        run: ls -ltr
 
       - name: Terraform Fmt
         run: terraform fmt
