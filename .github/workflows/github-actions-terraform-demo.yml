@@ -17,8 +17,8 @@ jobs:
       - name: Cache .terraform directory
         uses: actions/cache@v3
         with:
-          path: terraform-docker-project/.terraform  # Corrected path
-          key: ${{ runner.os }}-terraform-${{ hashFiles('terraform-docker-project/**/.terraform') }} # Corrected path
+          path: terraform-docker-project/.terraform
+          key: ${{ runner.os }}-terraform-${{ hashFiles('terraform-docker-project/**/.terraform') }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -30,10 +30,10 @@ jobs:
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_wrapper: false # You can also try true
+          terraform_wrapper: false  # Or true, if you prefer
 
       - name: Navigate to Terraform Directory
-        run: cd terraform-docker-project
+        run: cd terraform-docker-project # Only needed if terraform_wrapper is false
 
       - name: Terraform Fmt
         run: terraform fmt
@@ -52,10 +52,10 @@ jobs:
         run: terraform plan -out=tfplan
 
       - name: Upload Terraform Plan
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # Corrected to v4
         with:
           name: tfplan
-          path: terraform-docker-project/tfplan # Corrected path
+          path: terraform-docker-project/tfplan
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
