@@ -20,6 +20,12 @@ jobs:
           path: terraform-docker-project/.terraform
           key: ${{ runner.os }}-terraform-${{ hashFiles('terraform-docker-project/**/.terraform') }}
 
+      - name: pwd
+        run: pwd
+
+      - name: ls
+        run: ls -ltr
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -44,21 +50,17 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
-      - name: Terraform Workspace Select/Create
-        run: |
-          terraform workspace select ${{ env.TF_VAR_environment }} || terraform workspace new ${{ env.TF_VAR_environment }}
-
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan
 
       - name: Upload Terraform Plan
         uses: actions/upload-artifact@v4  # Corrected to v4
         with:
           name: tfplan
-          path: terraform-docker-project/tfplan
+          path: terraform-docker-project/
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -auto-approve
         env:
           TF_VAR_environment: prod
