@@ -21,4 +21,4 @@ jobs:
         run: cd terraform-docker-project # Relative path!
 
       - name: List Files After Navigation (Debug)
-        run: ls -ltr
+        run: pwd
