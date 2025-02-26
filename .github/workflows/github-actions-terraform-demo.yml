@@ -10,31 +10,30 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod
 
-    defaults:
-      run:
-        cd terraform-docker-project
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: view
-        run: pwd
-
-      - name: view
-        run: ls -ltr
+      - name: Cache .terraform directory
+        uses: actions/cache@v3
+        with:
+          path: terraform-docker-project/.terraform  # Corrected path
+          key: ${{ runner.os }}-terraform-${{ hashFiles('terraform-docker-project/**/.terraform') }} # Corrected path
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}  
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_wrapper: false 
+          terraform_wrapper: false # You can also try true
+
+      - name: Navigate to Terraform Directory
+        run: cd terraform-docker-project
 
       - name: Terraform Fmt
         run: terraform fmt
@@ -45,11 +44,21 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
+      - name: Terraform Workspace Select/Create
+        run: |
+          terraform workspace select ${{ env.TF_VAR_environment }} || terraform workspace new ${{ env.TF_VAR_environment }}
+
       - name: Terraform Plan
         run: terraform plan -out=tfplan
 
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v3
+        with:
+          name: tfplan
+          path: terraform-docker-project/tfplan # Corrected path
+
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' 
-        run: terraform apply -auto-approve
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve tfplan
         env:
-          TF_VAR_environment: prod 
+          TF_VAR_environment: prod
