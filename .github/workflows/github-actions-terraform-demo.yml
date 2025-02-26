@@ -9,14 +9,17 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: prod
-    
+
+    defaults:
+      run:
+        cd terraform-docker-project
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: view
-        run: cd terraform-docker-project/
+        run: pwd
 
       - name: view
         run: ls -ltr
