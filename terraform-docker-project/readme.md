@@ -1,7 +1,7 @@
 <h1 align="center">You have reached my simple AWS webserver Terraform project that automatically installs a instance of Jenkins running on an EC2 using Docker.</h1>
 <h3 align="center">Terraform and Docker</h3>
 
-![alt text](https://github.com/briannadaniels49/automation/blob/main/terraform-docker-project/Jenkinsarch.PNG)
+#![alt text](https://github.com/briannadaniels49/automation/blob/main/terraform-docker-project/Jenkinsarch.PNG)
 
 - 📫 How to reach me **brianna.n.daniels49@gmail.com** or **https://www.linkedin.com/in/brianna-daniels-2a01ba149/**
 
