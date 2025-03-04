@@ -31,19 +31,19 @@ jobs:
           terraform_wrapper: false
 
       - name: terraform fmt
-        uses: terraform fmt
+        run: terraform fmt
 
       - name: terraform init
-        uses: terraform init
+        run: terraform init
 
       - name: terraform validate
-        uses: terraform validate
+        run: terraform validate
 
       - name: terraform plan
-        uses: terraform plan
+        run: terraform plan
 
       - name: terraform apply
-        uses: terraform apply -auto-approve
+        run: terraform apply -auto-approve
 
 
 
